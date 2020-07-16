@@ -15,14 +15,19 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @Slf4j
-public class ApplicationTest {
+public class SimpleFraudbustersInvocationTest {
 
     InspectorProxySrv.Iface inspectPayment = new THClientBuilder()
-            .withAddress(new URI(String.format("http://0.0.0.0:%s/fraud_inspector/v1", 8999)))
+            .withAddress(initUrlAddress())
             .withNetworkTimeout(300000)
             .build(InspectorProxySrv.Iface.class);
 
-    public ApplicationTest() throws URISyntaxException {
+    private URI initUrlAddress() {
+        try {
+            return new URI(String.format("http://0.0.0.0:%s/fraud_inspector/v1", 8999));
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
