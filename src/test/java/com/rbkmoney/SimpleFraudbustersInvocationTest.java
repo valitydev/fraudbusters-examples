@@ -48,9 +48,9 @@ public class SimpleFraudbustersInvocationTest {
                 new PaymentInfo(
                         new Shop("shopTest",
                                 new Category("pizza", "no category"),
-                                new ShopDetails("pizza-sushi"),
+                                new ShopDetails("onlystruga"),
                                 new ShopLocation() {{
-                                    setUrl("http://www.pizza-sushi.com/");
+                                    setUrl("http://www.onlystruga.com/");
                                 }}
                         ),
                         new InvoicePayment("payment_1",
