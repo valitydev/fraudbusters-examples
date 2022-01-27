@@ -1,20 +1,21 @@
 package com.rbkmoney;
 
-import com.rbkmoney.damsel.domain.*;
-import com.rbkmoney.damsel.proxy_inspector.InvoicePayment;
-import com.rbkmoney.damsel.proxy_inspector.Party;
-import com.rbkmoney.damsel.proxy_inspector.Shop;
-import com.rbkmoney.damsel.proxy_inspector.*;
-import com.rbkmoney.woody.thrift.impl.http.THClientBuilder;
+import dev.vality.damsel.domain.*;
+import dev.vality.damsel.proxy_inspector.InvoicePayment;
+import dev.vality.damsel.proxy_inspector.Party;
+import dev.vality.damsel.proxy_inspector.Shop;
+import dev.vality.damsel.proxy_inspector.*;
+import dev.vality.woody.thrift.impl.http.THClientBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.TException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
 public class SimpleFraudbustersInvocationTest {
@@ -36,11 +37,11 @@ public class SimpleFraudbustersInvocationTest {
     public void callAntifraud() throws TException, InterruptedException {
         for (int i = 0; i < 10; i++) {
             RiskScore riskScore = inspectPayment.inspectPayment(createContext(LocalDateTime.now().atZone(ZoneOffset.UTC).toString()));
-            Assert.assertEquals(RiskScore.high, riskScore);
+            assertEquals(RiskScore.high, riskScore);
         }
         Thread.sleep(1000L);
         RiskScore riskScore = inspectPayment.inspectPayment(createContext(LocalDateTime.now().atZone(ZoneOffset.UTC).toString()));
-        Assert.assertEquals(RiskScore.fatal, riskScore);
+        assertEquals(RiskScore.fatal, riskScore);
     }
 
     private Context createContext(String createdAt) {
@@ -64,15 +65,15 @@ public class SimpleFraudbustersInvocationTest {
                                                         .setFingerprint("xxxxx"))
                                                 .setPaymentTool(PaymentTool.bank_card(new BankCard()
                                                         .setToken("4J8vmnlYPwzYzia74fny81")
-                                                        .setPaymentSystem(BankCardPaymentSystem.visa)
+                                                        .setPaymentSystem(new PaymentSystemRef().setId("visa"))
                                                         .setBin("427640")
                                                         .setLastDigits("6395")
-                                                        .setIssuerCountry(Residence.RUS))))),
+                                                        .setIssuerCountry(CountryCode.RUS))))),
                                 new Cash()
                                         .setAmount(100L)
                                         .setCurrency(new CurrencyRef()
                                                 .setSymbolicCode("RUB"))),
-                        new com.rbkmoney.damsel.proxy_inspector.Invoice(
+                        new dev.vality.damsel.proxy_inspector.Invoice(
                                 "partyTest",
                                 createdAt,
                                 "",
